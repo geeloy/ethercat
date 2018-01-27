@@ -376,7 +376,7 @@ int main(int argc, char **argv)
     if (!sc)
         return -1;
 
-    if (ecrt_domain_reg_pdo_entry_list(domain1, domain1_regs)) {
+    if (ecrt_domain_reg_pdo_entry_list(domain1, domain1_regs, sizeof(domain1_regs))) {
         fprintf(stderr, "PDO entry registration failed!\n");
         return -1;
     }

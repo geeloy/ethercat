@@ -985,6 +985,7 @@ void ec_fsm_slave_config_enter_watchdog_divider(
 
         ec_datagram_fpwr(datagram, slave->station_address, 0x0400, 2);
         EC_WRITE_U16(datagram->data, config->watchdog_divider);
+
         fsm->retries = EC_FSM_RETRIES;
         fsm->state = ec_fsm_slave_config_state_watchdog_divider;
     } else {
@@ -1036,7 +1037,8 @@ void ec_fsm_slave_config_enter_watchdog(
     ec_slave_t *slave = fsm->slave;
     ec_slave_config_t *config = slave->config;
 
-    if (config && config->watchdog_intervals) {
+    //  Allow configuration, even 0-set value
+    if (config) {
         EC_SLAVE_DBG(slave, 1, "Setting process data"
                 " watchdog intervals to %u.\n", config->watchdog_intervals);
 

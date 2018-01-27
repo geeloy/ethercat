@@ -1637,8 +1637,10 @@ int ecrt_slave_config_idn(
  */
 int ecrt_domain_reg_pdo_entry_list(
         ec_domain_t *domain, /**< Domain. */
-        const ec_pdo_entry_reg_t *pdo_entry_regs /**< Array of PDO
+        const ec_pdo_entry_reg_t *pdo_entry_regs, /**< Array of PDO
                                                    registrations. */
+        const uint32_t nb_elem /**< Give the number of elements so
+                                    it's easier to parse the list */
         );
 
 /** Returns the current size of the domain's process data.

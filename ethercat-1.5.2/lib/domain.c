@@ -53,24 +53,28 @@ void ec_domain_clear(ec_domain_t *domain)
 /*****************************************************************************/
 
 int ecrt_domain_reg_pdo_entry_list(ec_domain_t *domain,
-        const ec_pdo_entry_reg_t *regs)
+        const ec_pdo_entry_reg_t *regs, const uint32_t nb_elem)
 {
     const ec_pdo_entry_reg_t *reg;
     ec_slave_config_t *sc;
     int ret;
+    reg = regs;
 
-    for (reg = regs; reg->index; reg++) {
-        if (!(sc = ecrt_master_slave_config(domain->master, reg->alias,
-                        reg->position, reg->vendor_id, reg->product_code)))
+    for(uint32_t i = 0; i < nb_elem; i++) {
+        sc = ecrt_master_slave_config(domain->master, reg->alias, reg->position, reg->vendor_id, reg->product_code);
+        if (!sc) {
             return -ENOENT;
+        }
 
-        if ((ret = ecrt_slave_config_reg_pdo_entry(sc, reg->index,
-                        reg->subindex, domain, reg->bit_position)) < 0)
+        ret = ecrt_slave_config_reg_pdo_entry(sc, reg->index, reg->subindex, domain, reg->bit_position);
+        if (ret < 0) {
+            free(sc);
             return ret;
+        }
 
         *reg->offset = ret;
+        reg++;
     }
-
     return 0;
 }
 

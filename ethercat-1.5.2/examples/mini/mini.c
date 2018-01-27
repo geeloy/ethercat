@@ -460,7 +460,7 @@ int __init init_mini_module(void)
 #endif
 
     printk(KERN_INFO PFX "Registering PDO entries...\n");
-    if (ecrt_domain_reg_pdo_entry_list(domain1, domain1_regs)) {
+    if (ecrt_domain_reg_pdo_entry_list(domain1, domain1_regs, sizeof(domain1_regs))) {
         printk(KERN_ERR PFX "PDO entry registration failed!\n");
         goto out_release_master;
     }

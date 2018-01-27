@@ -396,16 +396,17 @@ int data_changed(
  *****************************************************************************/
 
 int ecrt_domain_reg_pdo_entry_list(ec_domain_t *domain,
-        const ec_pdo_entry_reg_t *regs)
+        const ec_pdo_entry_reg_t *regs, const uint32_t nb_elem)
 {
     const ec_pdo_entry_reg_t *reg;
     ec_slave_config_t *sc;
     int ret;
+    uint32_t i=0;
 
     EC_MASTER_DBG(domain->master, 1, "ecrt_domain_reg_pdo_entry_list("
             "domain = 0x%p, regs = 0x%p)\n", domain, regs);
-
-    for (reg = regs; reg->index; reg++) {
+    reg = regs;
+    for(uint32_t i = 0; i < nb_elem; i++) {
         sc = ecrt_master_slave_config_err(domain->master, reg->alias,
                 reg->position, reg->vendor_id, reg->product_code);
         if (IS_ERR(sc))
@@ -417,6 +418,7 @@ int ecrt_domain_reg_pdo_entry_list(ec_domain_t *domain,
             return ret;
 
         *reg->offset = ret;
+        reg++;
     }
 
     return 0;
